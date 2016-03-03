@@ -60,7 +60,7 @@ app.use(koa.routes());
 /**
  * 微信服务器验证地址
  */
-app.use(wechat('wechat-test').middleware(function* (){
+app.use(wechat('wechat').middleware(function* (){
   console.log('----------------------');
   var message = this.weixin;
   console.log('message-->>',message);
