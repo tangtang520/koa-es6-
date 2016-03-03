@@ -53,11 +53,10 @@ app.use(function *(next){
 app.use(require('koa-static')(__dirname + '/public'));
 // routes definition
 require('./routes/routes')(app);
-// mount root routes  
-app.use(koa.routes());
-
 //微信验证和自动回复
 require('./controllers/wechat-auth-auto')(app);
+// mount root routes  
+app.use(koa.routes());
 app.on('error', function(err, ctx){
   log.error('server error', err, ctx);
 });
