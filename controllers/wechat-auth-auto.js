@@ -3,6 +3,7 @@
  */
 var wechat = require('co-wechat');
 module.exports = function* (app){
+    console.log('app---',app);
     app.use(wechat('wechat').middleware(function* (){
         console.log('----------------------');
         var message = this.weixin;
