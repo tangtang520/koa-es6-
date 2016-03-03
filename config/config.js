@@ -14,7 +14,7 @@ var base = {
 var specific = {
     development: {
         app: {
-            port: process.env.PORT || 6300,
+            port: process.env.PORT || 80,
             name: "wechat - Dev",
             keys: [ "super-secret-hurr-durr" ],
         },
