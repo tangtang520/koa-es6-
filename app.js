@@ -4,7 +4,10 @@ var app = require('koa')()
   , json = require('koa-json')
   , views = require('koa-views')
   , onerror = require('koa-onerror');
+
+var WechatAPI = require('co-wechat-api');
 var wechat = require('co-wechat');
+var api = new WechatAPI('wx2a3767e2a57da7cb', '1ebe1425ffd78fa360b1d26314670d34');
 /**
  * Config
  */
@@ -37,7 +40,6 @@ fs.readdirSync(modelsPath).forEach(function(file) {
   }
 });
 // global middlewares
-var routes = require('./routes/routes');
 app.use(require('koa-bodyparser')());
 app.use(json());
 app.use(logger());
@@ -54,51 +56,17 @@ app.use(require('koa-static')(__dirname + '/public'));
 require('./routes/routes')(app);
 // mount root routes  
 app.use(koa.routes());
+
+/**
+ * 微信服务器验证地址
+ */
+app.use(wechat('wechat-test').middleware(function* (){
+  console.log('----------------------');
+  var message = this.weixin;
+  console.log('message-->>',message);
+}))
 app.on('error', function(err, ctx){
   log.error('server error', err, ctx);
 });
-/**
- * 微信操作
- */
-app.use(wechat('wechat').middleware(function *() {
-  // 微信输入信息都在this.weixin上
-  var message = this.weixin;
-  if (message.FromUserName === 'diaosi') {
-    // 回复屌丝(普通回复)
-    this.body = 'hehe';
-  } else if (message.FromUserName === 'text') {
-    //你也可以这样回复text类型的信息
-    this.body = {
-      content: 'text object',
-      type: 'text'
-    };
-  } else if (message.FromUserName === 'hehe') {
-    // 回复一段音乐
-    this.body = {
-      type: "music",
-      content: {
-        title: "来段音乐吧",
-        description: "一无所有",
-        musicUrl: "http://mp3.com/xx.mp3",
-        hqMusicUrl: "http://mp3.com/xx.mp3"
-      }
-    };
-  } else if (message.FromUserName === 'kf') {
-    // 转发到客服接口
-    this.body = {
-      type: "customerService",
-      kfAccount: "test1@test"
-    };
-  } else {
-    // 回复高富帅(图文回复)
-    this.body = [
-      {
-        title: '你来我家接我吧',
-        description: '这是女神与高富帅之间的对话',
-        picurl: 'http://nodeapi.cloudfoundry.com/qrcode.jpg',
-        url: 'http://nodeapi.cloudfoundry.com/'
-      }
-    ];
-  }
-}));
+
 module.exports = app;

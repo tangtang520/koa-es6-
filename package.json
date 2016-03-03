@@ -8,6 +8,7 @@
   "dependencies": {
     "co": "^4.6.0",
     "co-wechat": "0.0.4",
+    "co-wechat-api": "^2.3.1",
     "debug": "^2.2.0",
     "jade": "~1.11.0",
     "koa": "^1.1.2",
@@ -20,6 +21,7 @@
     "koa-views": "^3.1.0",
     "lodash": "^4.1.0",
     "mongoose": "^4.3.7",
-    "redis": "^2.4.2"
+    "redis": "^2.4.2",
+    "urllib": "^2.7.2"
   }
 }

@@ -5,5 +5,5 @@ var Router = require('koa-router');
 var router = new Router();
 var loginController = require('../controllers/login/login');
 //注册接口
-router.post('/',loginController.register);
+router.get('/',loginController.register);
 module.exports = router.routes();
