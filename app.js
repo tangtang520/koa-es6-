@@ -6,7 +6,6 @@ var app = require('koa')()
   , onerror = require('koa-onerror');
 
 var WechatAPI = require('co-wechat-api');
-var wechat = require('co-wechat');
 var api = new WechatAPI('wx2a3767e2a57da7cb', '1ebe1425ffd78fa360b1d26314670d34');
 /**
  * Config
@@ -57,14 +56,8 @@ require('./routes/routes')(app);
 // mount root routes  
 app.use(koa.routes());
 
-/**
- * 微信服务器验证地址
- */
-app.use(wechat('wechat').middleware(function* (){
-  console.log('----------------------');
-  var message = this.weixin;
-  console.log('message-->>',message);
-}))
+//微信验证和自动回复
+require('./controllers/wechat-auth-auto')(app);
 app.on('error', function(err, ctx){
   log.error('server error', err, ctx);
 });
