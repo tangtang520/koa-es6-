@@ -33,19 +33,22 @@ module.exports = function(app){
         console.log('message-->>',message);
         if(message.MsgType === 'text'){
             this.body = "我爱你 老婆";
-        }
-        //创建菜单
-        const createMenu = yield api.createMenu(menu);
-        console.log('createMenu-->>',createMenu);
-        //关注公众号之后 获取用户的基本信息
-        if(message.Event === 'subscribe'){
             const openid = message.FromUserName;
             console.log('openid--->>',openid);
-            api.getUser(openid);
-            console.log('---------------');
-            //const userInfo = api.getUser(openid);
-            //console.log('userInfo-->>',userInfo);
-            //this.body = userInfo;
+            const result = api.getUser(openid);
         }
+        //创建菜单
+        //const createMenu = yield api.createMenu(menu);
+        //console.log('createMenu-->>',createMenu);
+        //关注公众号之后 获取用户的基本信息
+        //if(message.Event === 'subscribe'){
+        //    const openid = message.FromUserName;
+        //    console.log('openid--->>',openid);
+        //    api.getUser(openid);
+        //    console.log('---------------');
+        //    //const userInfo = api.getUser(openid);
+        //    //console.log('userInfo-->>',userInfo);
+        //    //this.body = userInfo;
+        //}
     }))
 }
