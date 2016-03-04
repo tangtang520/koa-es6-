@@ -4,9 +4,6 @@ var app = require('koa')()
   , json = require('koa-json')
   , views = require('koa-views')
   , onerror = require('koa-onerror');
-
-var WechatAPI = require('co-wechat-api');
-var api = new WechatAPI('wx2a3767e2a57da7cb', '1ebe1425ffd78fa360b1d26314670d34');
 /**
  * Config
  */
@@ -53,8 +50,8 @@ app.use(function *(next){
 app.use(require('koa-static')(__dirname + '/public'));
 // routes definition
 require('./routes/routes')(app);
-//微信验证和自动回复
-require('./controllers/wechat-auth-auto')(app);
+//微信验证服务器连接
+require('./controllers/wechat/wechat-auth-auto')(app);
 // mount root routes  
 app.use(koa.routes());
 app.on('error', function(err, ctx){
