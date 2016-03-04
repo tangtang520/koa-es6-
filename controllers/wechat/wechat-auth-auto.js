@@ -39,9 +39,9 @@ module.exports = function(app){
         console.log('createMenu-->>',createMenu);
         //关注公众号之后 获取用户的基本信息
         if(message.Event === 'subscribe'){
-            const opne_id = message.FromUserName;
-            console.log('opne_id--->>',opne_id);
-            const userInfo = api.getUser({opne_id:opne_id,lang:'zh_CN '});
+            const openid = message.FromUserName;
+            console.log('openid--->>',openid);
+            const userInfo = api.getUser({openid:openid,lang:'zh_CN '});
             console.log('userInfo-->>',userInfo);
             this.body = userInfo;
         }
