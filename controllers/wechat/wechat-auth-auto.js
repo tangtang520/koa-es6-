@@ -35,7 +35,7 @@ module.exports = function(app){
             this.body = "我爱你 老婆";
             const openid = message.FromUserName;
             console.log('openid--->>',openid);
-            const result = api.getUser(openid);
+            const result = yield api.getUser(openid);
             console.log('result-->>',result);
         }
         //创建菜单
