@@ -41,9 +41,10 @@ module.exports = function(app){
         if(message.Event === 'subscribe'){
             const openid = message.FromUserName;
             console.log('openid--->>',openid);
-            const userInfo = yield api.getUser(openid);
-            console.log('userInfo-->>',userInfo);
-            this.body = userInfo;
+            api.sendText(openid, 'Hello world');
+            //const userInfo = api.getUser(openid);
+            //console.log('userInfo-->>',userInfo);
+            //this.body = userInfo;
         }
     }))
 }
