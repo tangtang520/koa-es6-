@@ -21,12 +21,25 @@ var menu = {
                     "url":"http://www.soso.com/"
                 },
                 {
+                    "type":"view",
+                    "name":"视频",
+                    "url":"http://v.qq.com/"
+                },
+                {
                     "type":"click",
                     "name":"赞一下我们",
                     "key":"V1001_GOOD"
                 }]
-        }]
-};
+        }],
+    "matchrule":{
+        "group_id":"2",
+        "sex":"1",
+        "country":"中国",
+        "province":"广东",
+        "city":"广州",
+        "client_platform_type":"2"
+    }
+}
 module.exports = function(app){
     app.use(wechat('wechat').middleware(function* (){
         var message = this.weixin;
@@ -35,7 +48,7 @@ module.exports = function(app){
             this.body = "我爱你 老婆";
         }
         //创建菜单
-        const createMenu = yield api.createMenu(menu);
+        const createMenu = yield api.addConditionalMenu(menu);
         console.log('createMenu-->>',createMenu);
     }))
 }
