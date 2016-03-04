@@ -36,6 +36,7 @@ module.exports = function(app){
             const openid = message.FromUserName;
             console.log('openid--->>',openid);
             const result = api.getUser(openid);
+            console.log('result-->>',result);
         }
         //创建菜单
         //const createMenu = yield api.createMenu(menu);
