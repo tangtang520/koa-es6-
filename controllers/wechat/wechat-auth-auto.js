@@ -35,7 +35,7 @@ module.exports = function(app){
             const openid = message.FromUserName;
             console.log('openid--->>',openid);
             try{
-                const result = yield api.getUser(openid);
+                const result = api.getUser(openid);
                 console.log('result-->>',result);
             }catch(err){
                 console.log('err-->>',err);
