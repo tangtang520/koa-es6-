@@ -34,7 +34,7 @@ module.exports = function(app){
         if(message.MsgType === 'text'){
             const openid = message.FromUserName;
             console.log('openid--->>',openid);
-            const result = yield api.getUser(openid);
+            const result = yield *api.getUser(openid);
             console.log('result-->>',result);
         }
         //创建菜单
