@@ -41,7 +41,7 @@ module.exports = function(app){
         if(message.Event === 'subscribe'){
             const opne_id = message.FromUserName;
             console.log('opne_id--->>',opne_id);
-            const userInfo = api.getUser({opne_id,lang:'zh_CN '});
+            const userInfo = api.getUser({opne_id:opne_id,lang:'zh_CN '});
             console.log('userInfo-->>',userInfo);
             this.body = userInfo;
         }
