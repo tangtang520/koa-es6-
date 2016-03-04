@@ -28,7 +28,7 @@ var menu = {
         }]
 };
 module.exports = function(app){
-    app.use(wechat('wechat').middleware(function* (){
+    app.use(wechat('robot').middleware(function* (){
         var message = this.weixin;
         console.log('message-->>',message);
         if(message.MsgType === 'text'){
