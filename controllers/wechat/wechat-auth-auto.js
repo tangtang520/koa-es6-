@@ -32,7 +32,6 @@ module.exports = function(app){
         var message = this.weixin;
         console.log('message-->>',message);
         if(message.MsgType === 'text'){
-            this.body = "我爱你 老婆";
             const openid = message.FromUserName;
             console.log('openid--->>',openid);
             const result = yield api.getUser(openid);
