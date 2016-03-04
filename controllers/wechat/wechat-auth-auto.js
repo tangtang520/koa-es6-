@@ -34,8 +34,12 @@ module.exports = function(app){
         if(message.MsgType === 'text'){
             const openid = message.FromUserName;
             console.log('openid--->>',openid);
-            const result = yield api.getUser(openid);
-            console.log('result-->>',result);
+            try{
+                const result = yield api.getUser(openid);
+                console.log('result-->>',result);
+            }catch(err){
+                console.log('err-->>',err);
+            }
         }
         //创建菜单
         //const createMenu = yield api.createMenu(menu);
