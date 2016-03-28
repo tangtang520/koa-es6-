@@ -4,7 +4,7 @@
 'use strict'
 var WechatAPI = require('co-wechat-api');
 var wechat = require('co-wechat');
-var api = new WechatAPI('wx2a3767e2a57da7cb', '1ebe1425ffd78fa360b1d26314670d34');
+var api = new WechatAPI('wxab43b8e9a791d911', 'a18e6de5f507e2ffc026706aec78aaaa');
 var menu = {
     "button":[
         {
@@ -28,7 +28,7 @@ var menu = {
         }]
 };
 module.exports = function(app){
-    app.use(wechat('robot').middleware(function* (){
+    app.use(wechat('zholxn1402636280').middleware(function* (){
         var message = this.weixin;
         console.log('message-->>',message);
         if(message.MsgType === 'text'){
@@ -37,6 +37,7 @@ module.exports = function(app){
             try{
                 const result = yield api.getUser(openid);
                 console.log('result-->>',result);
+                this.body = result;
             }catch(err){
                 console.log('err-->>',err);
             }
