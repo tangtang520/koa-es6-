@@ -37,7 +37,10 @@ module.exports = function(app){
             try{
                 const result = yield api.getUser(openid);
                 console.log('result-->>',result);
-                this.body = result;
+                this.body = {
+                    type:'text',
+                    content:result
+                }
             }catch(err){
                 console.log('err-->>',err);
             }
