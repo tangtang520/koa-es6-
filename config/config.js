@@ -19,14 +19,14 @@ var specific = {
             keys: [ "super-secret-hurr-durr" ],
         },
         mongo: {
-            url: "mongodb://182.254.240.238:27017/wechat",
-            option : {
-                db: { native_parser: true },
-                server: { poolSize: 5 },
-                replset: { rs_name: "wechat" },
-                user: 'ecarlife',
-                pass: 'Q5tVjCaUZy3bG'
-            }
+            url: "mongodb://127.0.0.1:27017/cms",
+            //option : {
+            //    db: { native_parser: true },
+            //    server: { poolSize: 5 },
+            //    replset: { rs_name: "wechat" },
+            //    user: 'ecarlife',
+            //    pass: 'Q5tVjCaUZy3bG'
+            //}
         },
     },
 };
