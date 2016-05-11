@@ -28,11 +28,15 @@ var fs = require("fs");
 const modelsPath = config.app.root + "/models";
 fs.readdirSync(modelsPath).forEach(function(file) {
   if(file != '.DS_Store'){
-    fs.readdirSync(modelsPath + '/' + file).forEach(function(files){
-      if (~files.indexOf("js")) {
-        require(modelsPath + "/" + file + '/' + files);
-      }
-    })
+    if(file.indexOf('js') === -1){
+      fs.readdirSync(modelsPath + '/' + file).forEach(function(files){
+        if (~files.indexOf("js")) {
+          require(modelsPath + "/" + file + '/' + files);
+        }
+      })
+    }else{
+      require(modelsPath + "/" + file);
+    }
   }
 });
 // global middlewares
