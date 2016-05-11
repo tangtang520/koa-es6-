@@ -14,6 +14,7 @@ const config = require("./config/config");
  */
 
 require("./lib/connect_db");
+require("./lib/connect_redis");
 process.on('SIGINT',function(){
   var mongoose = require('mongoose');
   mongoose.connection.close(function(){

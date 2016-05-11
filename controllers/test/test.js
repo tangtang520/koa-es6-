@@ -1,7 +1,10 @@
 /**
  * Created by tangtang on 16/5/10.
  */
+'use strict'
+const client = require('../../lib/connect_redis');
 var qiniu = require("qiniu");
+
 qiniu.conf.ACCESS_KEY = '0Zx661g2nBzFEk-ABU7IgDkdBpOPdGEqgvS-cqoc';
 qiniu.conf.SECRET_KEY = 'ACiT4WAz8zwFZW8ikABDQjRxcmiBNC7dkncEIee3';
 //exports.test = function* (){
@@ -45,16 +48,35 @@ qiniu.conf.SECRET_KEY = 'ACiT4WAz8zwFZW8ikABDQjRxcmiBNC7dkncEIee3';
 //    uploadFile(token, key, filePath);
 //}
 
+//exports.test = function* (){
+////构建私有空间的链接
+//    let url = 'http://7xtwr1.com1.z0.glb.clouddn.com/test.jpg';
+//    var policy = new qiniu.rs.GetPolicy();
+//
+////生成下载链接url
+//    var downloadUrl = policy.makeRequest(url);
+//
+////打印下载的url
+//    console.log(downloadUrl);
+//
+//
+//}
+
+
 exports.test = function* (){
-//构建私有空间的链接
-    let url = 'http://7xtwr1.com1.z0.glb.clouddn.com/test.jpg';
-    var policy = new qiniu.rs.GetPolicy();
-
-//生成下载链接url
-    var downloadUrl = policy.makeRequest(url);
-
-//打印下载的url
-    console.log(downloadUrl);
-
-
+    console.log('in-->>');
+    //client.setex('name',100,'test',function(err,result){
+    //    if(err){
+    //        console.log(err);
+    //    }else{
+    //        console.log('result--->>',result);
+    //    }
+    //})
+    client.get('name',function(err,result){
+        if(err){
+            console.log('err-->>',err);
+        }else{
+            console.log('result-->>',result);
+        }
+    })
 }

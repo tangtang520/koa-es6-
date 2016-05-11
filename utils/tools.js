@@ -3,6 +3,7 @@
  */
 'use strict'
 const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 let extra = {};
 module.exports = extra;
 
@@ -26,4 +27,33 @@ extra.createCode = function(num){
         str += Math.floor(Math.random() * 10)
     };
     return str;
+};
+
+//给指定邮箱发送验证码
+extra.sendCode = function(toMail,msg){
+    return new Promise(function(resolve,reject){
+        const config = {
+            host: 'smtp.qq.com',
+            port: 465,
+            secure: true, // use SSL
+            auth: {
+                user: '1315803594@qq.com',
+                pass: 'yxjwebxuofdtjebd'
+            }};
+        var mailOptions = {
+            from: '1315803594@qq.com', // sender address
+            to: toMail, // list of receivers
+            subject: '验证码', // Subject line
+            text: msg, // plaintext body
+            //html: '<b>Hello world 🐴</b>' // html body
+        };
+        const transporter = nodemailer.createTransport(config);
+        transporter.sendMail(mailOptions, function(err, result){
+            if(err){
+                reject(new Error('发送验证码出错err',err));
+            }else{
+                resolve(result);
+            }
+        });
+    })
 }

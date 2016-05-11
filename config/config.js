@@ -28,7 +28,18 @@ var specific = {
             //    pass: 'Q5tVjCaUZy3bG'
             //}
         },
+        redis : {
+            "ip": "127.0.0.1",
+            "port": 6379
+            //"option": {
+            //    "connect_timeout": 5000,
+            //    "auth_pass": "ecarlife121"
+            //},
+        }
     },
 };
 
 module.exports = _.merge(base, specific[env]);
+
+//设置验证码失效时间
+global.codeTTL = 3 * 60;

@@ -5,6 +5,7 @@
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const CommonDao = require('../../utils/tools');
+const clientDao = require('../redis/redis');
 
 let resMsg = {
     "successMsg":{
@@ -32,6 +33,7 @@ exports.register = function* (){
             this.body = resMsg.failedMsg;
             return;
         };
+
         //检验邮箱格式
         if(!CommonDao.isEmail(data.mail)){
             resMsg.failedMsg.msg = '邮箱格式不正确';
@@ -93,13 +95,89 @@ exports.updatePass = function* (){
     }
 };
 
-//发送验证码
+//发送验证码 mail  忘记密码操作
 exports.sendCode = function* (){
     try{
         const data = this.request.body;
         console.log('data--->>',data);
+        if(!data.mail){
+            resMsg.failedMsg.msg = '参数上传不正确';
+            this.body = resMsg.failedMsg;
+            return;
+        };
+        if(!CommonDao.isEmail(data.mail)){
+            resMsg.failedMsg.msg = '邮箱格式不正确';
+            this.body = resMsg.failedMsg;
+            return;
+        };
+        const isUser = yield User.count({mail:data.mail,isDelete:false,userType:{$ne:'SCHOOL'}}).exec();
+        if(isUser === 0){
+            resMsg.failedMsg.msg = '邮箱不存在';
+            this.body = resMsg.failedMsg;
+        };
+        //发送邮箱验证码
+        const code = CommonDao.createCode(6);
+        const msg = '您的验证码为' + code + ',验证码三分钟有效,请您尽快验证';
+        const result = yield CommonDao.sendCode(data.mail,msg);
+        console.log('result--->>',result);
+        this.body = resMsg.successMsg;
+        //设置redis
+        clientDao.setex(data.mail,global.codeTTL,code);
     }catch(err){
         console.log('err---->>',err);
+        this.body = resMsg.failedMsg;
+    }
+};
+
+//核对验证码 mail code
+exports.checkCode = function* (){
+    try{
+        const data = this.request.body;
+        if(!data.mail || !data.code){
+            resMsg.failedMsg.msg = '参数上传不正确';
+            this.body = resMsg.failedMsg;
+            return;
+        };
+        const result = yield clientDao.get(data.mail);
+        if(!result){
+            resMsg.failedMsg.msg = '验证码已失效';
+            this.body = resMsg.failedMsg;
+            return;
+        };
+        if(data.code !== result){
+            resMsg.failedMsg.msg = '验证码不正确';
+            this.body = resMsg.failedMsg;
+            return;
+        };
+        this.body = resMsg.successMsg;
+        //删除redis
+        clientDao.del(data.mail);
+    }catch(err){
+        console.log('err--->>',err);
+        this.body = resMsg.failedMsg;
+    }
+};
+
+//修改密码 mail newPassword
+exports.checkCodeAndUpdatePass = function* (){
+    try{
+        const data = this.request.body;
+        if(!data.mail || !data.newPassword){
+            resMsg.failedMsg.msg = '参数上传不正确';
+            this.body = resMsg.failedMsg;
+            return;
+        };
+        const result = yield User.findOneAndUpdate({mail:data.mail,isDelete:false},
+            {$set:{password:CommonDao.createMD5(data.newPassword)}}).exec();
+        if(!result){
+            resMsg.failedMsg.msg = '邮箱地址不正确';
+            this.body = resMsg.failedMsg;
+            return;
+        };
+        resMsg.successMsg.data = result;
+        this.body = resMsg.successMsg;
+    }catch(err){
+        console.log('err--->>',err);
         this.body = resMsg.failedMsg;
     }
 }
