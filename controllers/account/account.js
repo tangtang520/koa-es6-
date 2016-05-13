@@ -180,4 +180,66 @@ exports.checkCodeAndUpdatePass = function* (){
         console.log('err--->>',err);
         this.body = resMsg.failedMsg;
     }
+};
+
+//登录接口 userName password
+exports.login = function* (){
+    try{
+        const data = this.request.body;
+        if(!data.userName || !data.password){
+            resMsg.failedMsg.msg = '参数上传不正确';
+            this.body = resMsg.failedMsg;
+            return;
+        };
+        const result = yield User.findOne({userName:data.userName,isDelete:false}).exec();
+        if(!result){
+            resMsg.failedMsg.msg = '用户不存在';
+            this.body = resMsg.failedMsg;
+            return;
+        };
+        if(result.password !== CommonDao.createMD5(data.password)){
+            resMsg.failedMsg.msg = '密码不正确';
+            this.body = resMsg.failedMsg;
+            return;
+        };
+        resMsg.successMsg.data = result;
+        this.body = resMsg.successMsg;
+    }catch(err){
+        console.log('err-->>',err);
+        this.body = resMsg.failedMsg;
+    }
+};
+
+//获取用户详情
+exports.getUserDetails = function* (){
+    try{
+        const _id = this.params._id;
+        console.log('_id--->>',_id);
+        const userInfo = yield User.findById(_id,'-password').exec();
+        resMsg.successMsg.data = userInfo;
+        this.body = resMsg.successMsg;
+    }catch(err){
+        console.log('err--->>',err);
+        this.body = resMsg.failedMsg;
+    }
+};
+
+//更新用户
+exports.updateUser = function* (){
+    try{
+        const data = this.request.body;
+        const _id = data._id;
+        delete data._id;
+        delete data.createTime;
+        delete data.updateTime;
+        delete data.__v;
+        delete data.isDelete;
+        console.log('data--->>',data);
+        const result = yield User.update({_id:_id,isDelete:false},data).exec();
+        resMsg.successMsg.data = result;
+        this.body = resMsg.successMsg;
+    }catch(err){
+        console.log('err-->>',err);
+        this.body = resMsg.failedMsg;
+    }
 }

@@ -43,7 +43,7 @@ qiniu.conf.SECRET_KEY = 'ACiT4WAz8zwFZW8ikABDQjRxcmiBNC7dkncEIee3';
 //            }
 //        });
 //    }
-//
+
 ////调用uploadFile上传
 //    uploadFile(token, key, filePath);
 //}

@@ -4,26 +4,30 @@
 'use strict'
 const Router = require('koa-router');
 const router = new Router();
-const loginController = require('../controllers/account/login');
-const registerController = require('../controllers/account/register');
-
-//登录接口
-router.post('/login',loginController.login);
+const accountController = require('../controllers/account/account');
 
 //注册接口
-router.post('/register',registerController.register);
+router.post('/register',accountController.register);
 
 //密码修改 通过老密码
-router.put('/pass',registerController.updatePass);
+router.put('/pass',accountController.updatePass);
 
 //发送验证码
-router.post('/sendCode',registerController.sendCode);
+router.post('/sendCode',accountController.sendCode);
 
 //核对验证码
-router.post('/checkCode',registerController.checkCode);
+router.post('/checkCode',accountController.checkCode);
 
 //修改密码 通过验证码
-router.put('/codePass',registerController.checkCodeAndUpdatePass);
+router.put('/codePass',accountController.checkCodeAndUpdatePass);
 
+//登录接口
+router.post('/login',accountController.login);
+
+//获取用户详情
+router.get('/:_id',accountController.getUserDetails);
+
+//编辑用户
+router.put('/',accountController.updateUser);
 
 module.exports = router.routes();
