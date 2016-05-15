@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const CommonDao = require('../../utils/tools');
 const clientDao = require('../redis/redis');
+const Role = mongoose.model('Role');
 
 let resMsg = {
     "successMsg":{
@@ -241,5 +242,37 @@ exports.updateUser = function* (){
     }catch(err){
         console.log('err-->>',err);
         this.body = resMsg.failedMsg;
+    }
+};
+
+//学生选择学校 用户的user_id  学校名称name 和 学校的school_id
+exports.selectSchool = function* (){
+    try{
+        const data = this.request.body;
+        console.log('data--->>>',data);
+        if(!data.user_id || !data.name || !data.school_id){
+            resMsg.failedMsg.msg = '参数上传不正确';
+            this.body = resMsg.failedMsg;
+            return;
+        };
+        const result = yield User.findById(data.user_id,{$set:
+        {schoolInfo:{schoolId:data.school_id,schoolName:data.name}}}).exec();
+        resMsg.successMsg.data = result;
+        this.body = resMsg.successMsg;
+    }catch(err){
+        console.log('err--->>',err);
+        this.body = resMsg.failedMsg;
+    }
+};
+
+//获取所有的学校
+exports.getAllSchool = function* (){
+    try{
+        const result = yield Role.find({roleType:'SCHOOL',isDelete:false}).exec();
+        resMsg.successMsg.data = result;
+        this.body = resMsg.successMsg;
+    }catch(err){
+        console.log('err----->>',err);
+       this.body = resMsg.failedMsg;
     }
 }

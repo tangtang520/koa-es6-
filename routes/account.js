@@ -30,4 +30,10 @@ router.get('/:_id',accountController.getUserDetails);
 //编辑用户
 router.put('/',accountController.updateUser);
 
+//学生选择学校
+router.post('/selectSchool',accountController.selectSchool);
+
+//获取所有学校
+router.get('/allSchool',accountController.getAllSchool);
+
 module.exports = router.routes();
