@@ -39,4 +39,7 @@ router.get('/allSchool',accountController.getAllSchool);
 //新增公司 或者学校
 router.post('/role',accountController.addRole);
 
+//学校查看所有学生
+router.get('/studentOfSchool',accountController.getStudentOfSchool);
+
 module.exports = router.routes();

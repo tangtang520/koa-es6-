@@ -255,7 +255,7 @@ exports.selectSchool = function* (){
             return;
         };
         const result = yield User.findById(data.user_id,{$set:
-        {schoolInfo:{schoolId:data.school_id,schoolName:data.name}}}).exec();
+        {roleInfo:{roleId:data.school_id,roleName:data.name}}}).exec();
         resMsg.successMsg.data = result;
         this.body = resMsg.successMsg;
     }catch(err){
@@ -309,6 +309,39 @@ exports.addRole = function*(){
         this.body = resMsg.successMsg;
         yield User.update({_id:data._id,isDelete:false},{$set:{roleInfo:{roleId:result._id,
             roleName:data.name}}}).exec();
+    }catch(err){
+        console.log('err--->>',err);
+        this.body = resMsg.failedMsg;
+    }
+};
+
+//学校查看学生列表 用户_id  currentPage  limit
+exports.getStudentOfSchool = function* (){
+    try{
+        const data = this.request.query;
+        if(!data._id){
+            resMsg.failedMsg.msg = '参数上传不正确';
+            this.body = resMsg.failedMsg;
+            return;
+        };
+        const userInfo = yield User.findOne({_id:data._id,isDelete:false,userType:'SCHOOL'}).exec();
+        if(!userInfo){
+            resMsg.failedMsg.msg = 'id不正确';
+            this.body = resMsg.failedMsg;
+            return;
+        };
+        if(!userInfo.roleInfo){
+            resMsg.failedMsg.msg = '该用户还未建立学校信息,没有学生信息';
+            this.body = resMsg.failedMsg;
+            return;
+        };
+        let currentPage = data.currentPage || 1;
+        let limit = data.limit || 10;
+        let begin = (currentPage - 1) * limit;
+        const allUser = yield User.find({'roleInfo.roleId':userInfo.roleInfo.roleId,isDelete:false,userType:'STUDENT'})
+            .skip(begin).limit(limit).exec();
+        resMsg.successMsg.data = allUser;
+        this.body = resMsg.successMsg;
     }catch(err){
         console.log('err--->>',err);
         this.body = resMsg.failedMsg;
