@@ -65,6 +65,7 @@ qiniu.conf.SECRET_KEY = 'ACiT4WAz8zwFZW8ikABDQjRxcmiBNC7dkncEIee3';
 
 exports.test = function* (){
     console.log('in-->>');
+    this.body = "test----->>>";
     //client.setex('name',100,'test',function(err,result){
     //    if(err){
     //        console.log(err);
@@ -72,11 +73,12 @@ exports.test = function* (){
     //        console.log('result--->>',result);
     //    }
     //})
-    client.get('name',function(err,result){
-        if(err){
-            console.log('err-->>',err);
-        }else{
-            console.log('result-->>',result);
-        }
-    })
+    //client.get('name',function(err,result){
+    //    if(err){
+    //        console.log('err-->>',err);
+    //    }else{
+    //        console.log('result-->>',result);
+    //    }
+    //})
+
 }

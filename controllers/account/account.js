@@ -34,7 +34,6 @@ exports.register = function* (){
             this.body = resMsg.failedMsg;
             return;
         };
-
         //检验邮箱格式
         if(!CommonDao.isEmail(data.mail)){
             resMsg.failedMsg.msg = '邮箱格式不正确';
@@ -245,7 +244,7 @@ exports.updateUser = function* (){
     }
 };
 
-//学生选择学校 用户的user_id  学校名称name 和 学校的school_id
+//学生选择学校 用户的user_id  学校名称name 和 学校的school_id   目前没用
 exports.selectSchool = function* (){
     try{
         const data = this.request.body;
@@ -265,14 +264,53 @@ exports.selectSchool = function* (){
     }
 };
 
-//获取所有的学校
+//获取所有的学校 或者公司 userType
 exports.getAllSchool = function* (){
     try{
-        const result = yield Role.find({roleType:'SCHOOL',isDelete:false}).exec();
+        const data = this.request.query;
+        if(!data.userType){
+            resMsg.failedMsg.msg = '参数上传不正确';
+            this.body = resMsg.failedMsg;
+            return;
+        };
+        const result = yield Role.find({roleType:data.userType,isDelete:false}).exec();
         resMsg.successMsg.data = result;
         this.body = resMsg.successMsg;
     }catch(err){
         console.log('err----->>',err);
        this.body = resMsg.failedMsg;
+    }
+};
+
+//新增 学校或者公司 登录人_id  学校或者公司 名称
+exports.addRole = function*(){
+    try{
+        const data = this.request.body;
+        if(!data.name || !data._id){
+            resMsg.failedMsg.msg = '参数上传不正确';
+            this.body = resMsg.failedMsg;
+            return;
+        };
+        const userInfo = yield User.findOne({_id:data._id,isDelete:false}).exec();
+        if(!userInfo){
+            resMsg.failedMsg.msg = 'id不正确';
+            this.body = resMsg.failedMsg;
+            return;
+        };
+        if(userInfo.userType === 'STUDENT'){
+            resMsg.failedMsg.msg = '学生没有权限建立';
+            this.body = resMsg.failedMsg;
+            return;
+        };
+        delete data._id;
+        data.roleType = userInfo.userType;
+        const result = yield Role.create(data);
+        resMsg.successMsg.data = result;
+        this.body = resMsg.successMsg;
+        yield User.update({_id:data._id,isDelete:false},{$set:{roleInfo:{roleId:result._id,
+            roleName:data.name}}}).exec();
+    }catch(err){
+        console.log('err--->>',err);
+        this.body = resMsg.failedMsg;
     }
 }

@@ -36,4 +36,7 @@ router.post('/selectSchool',accountController.selectSchool);
 //获取所有学校
 router.get('/allSchool',accountController.getAllSchool);
 
+//新增公司 或者学校
+router.post('/role',accountController.addRole);
+
 module.exports = router.routes();

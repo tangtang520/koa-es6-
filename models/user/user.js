@@ -16,7 +16,7 @@ const UserSchema = new schema({
     major : String, //专业
     studentID : String, //学号
     sex : String, //性别 MAN WOMAN
-    schoolInfo:{schoolId:String,schoolName:String},
+    roleInfo:{roleId:String,roleName:String},
     userType :String,   //学生,公司,学校管理员  STUDENT  COMPANY SCHOOL
     createTime : {type : Date,default : Date.now()}, //创建时间
     updateTime : {type : Date,default : Date.now()}, //更新时间
