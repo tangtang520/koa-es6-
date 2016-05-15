@@ -338,7 +338,13 @@ exports.getStudentOfSchool = function* (){
         let currentPage = data.currentPage || 1;
         let limit = data.limit || 10;
         let begin = (currentPage - 1) * limit;
-        const allUser = yield User.find({'roleInfo.roleId':userInfo.roleInfo.roleId,isDelete:false,userType:'STUDENT'})
+        let conditions = {'roleInfo.roleId':userInfo.roleInfo.roleId,isDelete:false,userType:'STUDENT'};
+        if(!!data.search){
+            conditions = {$or:[{'roleInfo.roleId':userInfo.roleInfo.roleId,isDelete:false,userType:'STUDENT',
+                realName:{$regex:data.search}},{'roleInfo.roleId':userInfo.roleInfo.roleId,isDelete:false,userType:'STUDENT',
+                studentID:{$regex:data.search}}]}
+        };
+        const allUser = yield User.find(conditions)
             .skip(begin).limit(limit).exec();
         resMsg.successMsg.data = allUser;
         this.body = resMsg.successMsg;
